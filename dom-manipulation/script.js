@@ -300,6 +300,27 @@ async function fetchQuotesFromServer(url) {
   }
 }
 
+// Example: fetch posts from JSONPlaceholder and map them into quotes
+const EXAMPLE_URL = 'https://jsonplaceholder.typicode.com/posts';
+async function fetchQuotesFromJsonPlaceholder() {
+  try {
+    const res = await fetch(EXAMPLE_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Network error: ' + res.status);
+    const data = await res.json();
+    if (!Array.isArray(data)) throw new Error('Unexpected data');
+    // Map first 10 posts into quote objects
+    const imported = data.slice(0, 10).map(p => ({ text: (p.title || p.body || '').toString(), category: 'imported' }));
+    quotes = imported;
+    saveQuotesToStorage();
+    populateCategorySelect();
+    showRandomQuote();
+    return quotes;
+  } catch (err) {
+    console.error('Failed to fetch from JSONPlaceholder', err);
+    throw err;
+  }
+}
+
 
 
 
