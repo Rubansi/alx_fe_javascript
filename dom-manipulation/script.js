@@ -360,6 +360,27 @@ async function syncQuotes(options = {}) {
   }
 }
 
+// Auto-rotate helpers
+let _autoRotateTimer = null;
+function startAutoRotate(intervalMs = 5000) {
+  stopAutoRotate();
+  _autoRotateTimer = setInterval(() => {
+    try {
+      showRandomQuote();
+    } catch (e) {
+      console.error('Auto-rotate error', e);
+    }
+  }, intervalMs);
+  return _autoRotateTimer;
+}
+
+function stopAutoRotate() {
+  if (_autoRotateTimer) {
+    clearInterval(_autoRotateTimer);
+    _autoRotateTimer = null;
+  }
+}
+
 
 
 
