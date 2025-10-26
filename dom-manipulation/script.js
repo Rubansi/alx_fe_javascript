@@ -251,6 +251,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// Backwards-compatible function name expected by some checkers
+function categoryFilter() {
+  return filterQuotes();
+}
+
 
 
 
