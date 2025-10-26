@@ -204,6 +204,53 @@ document.addEventListener('DOMContentLoaded', () => {
   if (exportBtn) exportBtn.addEventListener('click', exportQuotes);
 });
 
+// Import quotes from a JSON file
+function importQuotesFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!Array.isArray(parsed)) throw new Error('JSON must be an array of quote objects');
+
+      // Basic validation: each item must have a text string
+      const cleaned = parsed.map(item => {
+        if (!item || typeof item.text !== 'string' || !item.text.trim()) {
+          throw new Error('Each quote must have a non-empty text property');
+        }
+        return { text: item.text.trim(), category: (item.category || 'general').toString().toLowerCase() };
+      });
+
+      // Replace current quotes with imported ones
+      quotes = cleaned;
+      saveQuotesToStorage();
+      populateCategorySelect();
+      showRandomQuote();
+      alert('Quotes imported successfully.');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to import quotes: ' + (err.message || err));
+    }
+  };
+  reader.onerror = () => alert('Failed to read file');
+  reader.readAsText(file);
+}
+
+// Wire import button and file input
+document.addEventListener('DOMContentLoaded', () => {
+  const fileInput = document.getElementById('importQuotesFile');
+  const importBtn = document.getElementById('importQuotesBtn');
+  if (importBtn && fileInput) {
+    importBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+      const f = e.target.files && e.target.files[0];
+      if (f) importQuotesFile(f);
+      // reset input so same file can be selected again if needed
+      e.target.value = '';
+    });
+  }
+});
+
 
 
 
