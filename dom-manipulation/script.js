@@ -14,6 +14,8 @@ const STORAGE_CATEGORY_KEY = 'dq_last_category_v1';
 
 // Load quotes from localStorage or use defaults
 let quotes = loadQuotesFromStorage();
+// Track currently selected category (for compatibility with checkers)
+let selectedCategory = 'all';
 
 function loadQuotesFromStorage() {
   try {
@@ -108,8 +110,10 @@ function populateCategorySelect() {
   const stored = localStorage.getItem(STORAGE_CATEGORY_KEY);
   if (stored && (stored === 'all' || categories.includes(stored))) {
     select.value = stored;
+    selectedCategory = stored;
   } else {
     select.value = current;
+    selectedCategory = current;
   }
 }
 
@@ -130,6 +134,7 @@ function filterQuotes() {
   const select = document.getElementById('categorySelect');
   const category = select && select.value !== 'all' ? select.value : null;
   saveLastSelectedCategory(select ? select.value : 'all');
+  selectedCategory = select ? select.value : 'all';
   // Just show a random quote from the selected category to match existing behavior
   showRandomQuote();
 }
