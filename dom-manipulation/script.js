@@ -340,6 +340,26 @@ async function sendQuotesToServer(url) {
   }
 }
 
+// High-level sync utility. Options: { fetchUrl, sendUrl }
+// - if fetchUrl provided, fetch quotes from server and replace local
+// - if sendUrl provided, POST current quotes to the server
+async function syncQuotes(options = {}) {
+  const { fetchUrl, sendUrl } = options || {};
+  const result = { fetched: null, sent: null };
+  try {
+    if (fetchUrl) {
+      result.fetched = await fetchQuotesFromServer(fetchUrl);
+    }
+    if (sendUrl) {
+      result.sent = await sendQuotesToServer(sendUrl);
+    }
+    return result;
+  } catch (err) {
+    console.error('syncQuotes failed', err);
+    throw err;
+  }
+}
+
 
 
 
