@@ -113,3 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (newQuoteBtn) newQuoteBtn.addEventListener('click', showRandomQuote);
   showRandomQuote();
 });
+
+
+// Task 1
+
