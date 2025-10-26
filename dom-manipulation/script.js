@@ -353,6 +353,7 @@ async function syncQuotes(options = {}) {
     if (sendUrl) {
       result.sent = await sendQuotesToServer(sendUrl);
     }
+    console.log('Quotes synced with server!');
     return result;
   } catch (err) {
     console.error('syncQuotes failed', err);
