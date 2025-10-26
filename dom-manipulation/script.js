@@ -274,6 +274,32 @@ function categoryFilter() {
   return filterQuotes();
 }
 
+// Optional: fetch quotes from a remote server (JSON endpoint)
+// Example usage: fetchQuotesFromServer('/data/quotes.json')
+async function fetchQuotesFromServer(url) {
+  if (!url) throw new Error('URL is required');
+  try {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Network response was not ok: ' + res.status);
+    const parsed = await res.json();
+    if (!Array.isArray(parsed)) throw new Error('Fetched data must be an array of quotes');
+    const cleaned = parsed.map(item => {
+      if (!item || typeof item.text !== 'string' || !item.text.trim()) {
+        throw new Error('Each fetched quote must have a non-empty text property');
+      }
+      return { text: item.text.trim(), category: (item.category || 'general').toString().toLowerCase() };
+    });
+    quotes = cleaned;
+    saveQuotesToStorage();
+    populateCategorySelect();
+    showRandomQuote();
+    return quotes;
+  } catch (err) {
+    console.error('Failed to fetch quotes from server', err);
+    throw err;
+  }
+}
+
 
 
 
