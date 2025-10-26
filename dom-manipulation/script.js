@@ -51,7 +51,10 @@ function createAddQuoteForm() {
   categoryLabel.htmlFor = 'categorySelect';
   const categorySelect = document.createElement('select');
   categorySelect.id = 'categorySelect';
-  categorySelect.appendChild(new Option('All', 'all'));
+  let option = document.createElement('option');
+  option.text = 'All';
+  option.value = 'all';
+  categorySelect.appendChild(option);
 
   // New quote inputs
   const inputText = document.createElement('input');
@@ -87,10 +90,20 @@ function populateCategorySelect() {
   // preserve current
   const current = select.value || 'all';
   select.innerHTML = '';
-  select.appendChild(new Option('All', 'all'));
+  select.innerHTML = '';
+  // add 'All' option
+  let option = document.createElement('option');
+  option.text = 'All';
+  option.value = 'all';
+  select.appendChild(option);
 
   const categories = Array.from(new Set(quotes.map(q => q.category || 'general'))).sort();
-  categories.forEach(cat => select.appendChild(new Option(cat, cat)));
+  categories.forEach(cat => {
+    option = document.createElement('option');
+    option.text = cat;
+    option.value = cat;
+    select.appendChild(option);
+  });
   // restore last selected category from storage if present and valid
   const stored = localStorage.getItem(STORAGE_CATEGORY_KEY);
   if (stored && (stored === 'all' || categories.includes(stored))) {
