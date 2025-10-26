@@ -321,6 +321,25 @@ async function fetchQuotesFromJsonPlaceholder() {
   }
 }
 
+// Send current quotes to a server endpoint via POST
+async function sendQuotesToServer(url) {
+  if (!url) throw new Error('URL is required');
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(quotes)
+    });
+    if (!res.ok) throw new Error('Server responded with ' + res.status);
+    return await res.json();
+  } catch (err) {
+    console.error('Failed to send quotes to server', err);
+    throw err;
+  }
+}
+
 
 
 
