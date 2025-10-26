@@ -179,6 +179,31 @@ document.addEventListener('DOMContentLoaded', () => {
   showRandomQuote();
 });
 
+// Export current quotes to a JSON file download
+function exportQuotes() {
+  try {
+    const dataStr = JSON.stringify(quotes, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'quotes.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    alert('Failed to export quotes.');
+    console.error(e);
+  }
+}
+
+// Wire export button (if present)
+document.addEventListener('DOMContentLoaded', () => {
+  const exportBtn = document.getElementById('exportQuotes');
+  if (exportBtn) exportBtn.addEventListener('click', exportQuotes);
+});
+
 
 
 
